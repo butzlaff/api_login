@@ -14,19 +14,19 @@ async function validateJwt(req, res, next) {
     const bearerToken = req.header('Authorization'); // Auth => { token } 
     const token = extractToken(bearerToken); // token => '' || null || undefined 
     if (!token && !bearerToken) {
-      return res.status(401).json({ message: 'Token not found' });
+      return res.status(401).json({ message: 'Toke não encontrado.' });
     }
     const payload = getPayload(token);
-
+    
     const user = await UserService.getByUserId(payload.data.id);
 
     if (!user) {
-      return res.status(401).json({ message: 'Expired or invalid token' });
+      return res.status(401).json({ messagem: 'Expired or invalid token' });
     }
-    req.user = user.dataValues;
+
     next();
   } catch (error) {
-    return res.status(401).json({ message: 'Expired or invalid token' });
+    return res.status(401).json({ messagem: 'Expired or invalid token' });
   }
 }
 

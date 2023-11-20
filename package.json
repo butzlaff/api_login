@@ -6,6 +6,7 @@
   },
   "description": "API RESTful para autenticação de usuários",
   "main": "src/server.js",
+  "engineStrict": true,
   "scripts": {
     "dev": "nodemon .",
     "start": "node ./build/server.js",
@@ -15,14 +16,12 @@
   "author": "Emilio Butzlaff",
   "license": "ISC",
   "devDependencies": {
-    "eslint": "^8.54.0",
-    "eslint-config-airbnb-base": "^15.0.0",
-    "eslint-config-airbnb-typescript": "^17.1.0",
-    "eslint-plugin-import": "^2.29.0",
-    "eslint-plugin-sonarjs": "^0.23.0",
+    "eslint-config-trybe-backend": "2.1.0",
+    "jest": "26.0.1",
+    "jest-each": "28.0.1",
     "nodemon": "^3.0.1",
-    "prisma": "^5.6.0",
-    "eslint-config-trybe-backend": "2.1.0"
+    "prisma": "^5.6.0"
+
   },
   "dependencies": {
     "@prisma/client": "^5.6.0",

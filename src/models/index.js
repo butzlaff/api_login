@@ -1,5 +1,7 @@
-const { createUser} = require("./Register.service")
+const { createUser, getByUserId, getUserByEmail } = require("./User.model")
 
 module.exports = {
-  createUser
+  createUser,
+  getByUserId,
+  getUserByEmail
 }
