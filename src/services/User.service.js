@@ -1,32 +1,40 @@
 const bcrypt = require('bcryptjs');
 const UserModel = require('../models/index');
-const createUserAuthenticated = require('../utils/createUserAuthenticated');
+const { createToken } = require('../auth/auth');
 
-async function createUser({ nome, email, senha, telefones }) {
-  const user = await UserModel.createUser({ nome, email, senha, telefones });
-  if (user instanceof Error) {
-    return { status: 400, data: { mensagem: 'E-mail já existente' } };
-  }
-  const userAuthenticated = createUserAuthenticated(user);
-  return { status: 201, data: userAuthenticated };
+function createUser({ nome, email, senha, telefones }) {
+  // criar validacoes
+  return UserModel.createUser({ nome, email, senha, telefones });
 }
 
 async function getByUserId(id) {
   const user = await UserModel.getByUserId(id);
-  return user;
+  if (user) {
+    return user;
+  }
+
+  return null;
 }
 
-async function getUserByEmail({ email, senha }) {
-  const user = await UserModel.getUserByEmail({ email });
-  if (user && bcrypt.compareSync(senha, user.senha)) {
-    const userAuthenticated = createUserAuthenticated(user);
-    return { status: 200, data: userAuthenticated };
+function getUserByEmail(email) {
+  if (!email) {
+    return null;
   }
-  return { status: 401, data: { mensagem: 'Usuário e/ou senha inválidos' } };
+  return UserModel.getUserByEmail(email);
+}
+
+async function authenticateUser(email, senha) {
+  const userExists = await getUserByEmail(email);
+  if (!userExists || !bcrypt.compareSync(senha, userExists.senha)) {
+    return null;
+  }
+  const user = await UserModel.updateUser(userExists.id, { ultimoLogin: new Date() });
+  return createToken(...user);
 }
 
 module.exports = {
   createUser,
   getByUserId,
+  authenticateUser,
   getUserByEmail,
 };

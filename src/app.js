@@ -1,6 +1,7 @@
 const cors = require('cors');
 const express = require('express');
 const { usersRouter } = require('./routes');
+const { ErrorHandler } = require('./middlewares/ErrorHanlder');
 
 const app = express();
 
@@ -23,5 +24,7 @@ app.use(accessControl);
 app.use('/users', usersRouter);
 
 app.get('/', (_req, res) => res.status(200).json({ message: 'OK' }));
+
+app.use(ErrorHandler);
 
 module.exports = app;

@@ -15,6 +15,7 @@ model tb_user {
   nome            String?
   email           String        @unique
   senha           String
+  ultimoLogin     DateTime      @default(now()) @map("ultimo_login")
   dataCriacao     DateTime      @default(now()) @map("data_criacao")
   dataAtualizacao DateTime      @updatedAt @map("data_atualizacao")
   telefones       tb_telefone[]

@@ -1,7 +1,8 @@
-const { createUser, getByUserId, getUserByEmail } = require("./User.model")
+const { createUser, getByUserId, getUserByEmail, updateUser } = require("./User.model")
 
 module.exports = {
   createUser,
   getByUserId,
-  getUserByEmail
+  getUserByEmail,
+  updateUser
 }
