@@ -1,10 +1,11 @@
 const express = require('express');
 const { UserController } = require('../controllers/index');
+const validateJwt = require('../utils/JWT');
 
 const router = express.Router();
 
 router.post('/register', UserController.createUser);
 router.post('/login', UserController.login);
-router.get('/:id', UserController.login);
+router.get('/:id', validateJwt, UserController.login);
 
 module.exports = router;

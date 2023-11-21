@@ -18,6 +18,7 @@ async function validateJwt(req, res, next) {
     }
     const payload = getPayload(token);
     
+    console.log(payload);
     const user = await UserService.getByUserId(payload.data.id);
 
     if (!user) {
