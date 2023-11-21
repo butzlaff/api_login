@@ -3,7 +3,7 @@ const bcrypt = require('bcryptjs');
 
 async function createUser({nome, email, senha, telefones}) {
   try {
-    const user = await prisma.$transaction([
+    const [user] = await prisma.$transaction([
       prisma.tb_user.create({
         data: {
           nome,

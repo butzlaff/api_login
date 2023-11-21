@@ -32,8 +32,7 @@ async function createUser(req, res, next) {
   if (!token) {
     return next({ name: 'INVALID_LOGIN' });
   }
-
-  const userFormated = formatUserData(...user);
+  const userFormated = formatUserData(user);
   delete userFormated.email;
   return res.status(201).json({ ...userFormated, token });
 }

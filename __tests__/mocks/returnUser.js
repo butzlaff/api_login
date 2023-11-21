@@ -1,9 +1,8 @@
 const returnUser = {
   id: 1,
-  nome: 'John Doe',
-  email: 'john.doe@example.com',
-  senha: '$10$Eza32/nK/3680vt699L1suAMVd2KsBWA7gu/si9jNvoLJGDXZqxGS',
-  telefones: [{ddd: 11, numero: 987654321 }]
+  data_criacao: "2023-11-21T22:14:43.652Z",
+  data_alteracao: "2023-11-21T22:14:43.652Z",
+  ultimo_login: "2023-11-21T22:14:43.652Z"
 }
 
-module.exports = returnUser;
+module.exports = { returnUser };
