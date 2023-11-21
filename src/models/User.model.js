@@ -52,7 +52,6 @@ async function updateUser(id, data) {
       data
     })
   ]);
-  console.log(...user)
   return user;
 }
 
