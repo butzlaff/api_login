@@ -1,2 +1,0 @@
--- AlterTable
-ALTER TABLE `tb_user` ADD COLUMN `ultimo_login` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3);

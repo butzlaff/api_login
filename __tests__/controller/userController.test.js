@@ -45,9 +45,9 @@ describe('Test UserController', () => {
 
       UserService.createUser = jest.fn().mockResolvedValueOnce({ status: 400, data: { mensagem: "E-mail já existente"} });
 
-      await createUser(req, res);
+      await createUser(req, res, next);
 
-      expect(res.status).toHaveBeenCalledWith(400);
+      expect(next).toHaveBeenCalledWith(400);
       expect(res.json).toHaveBeenCalledWith({ mensagem: "E-mail já existente"});
     });
   });
