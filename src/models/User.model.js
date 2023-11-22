@@ -3,18 +3,16 @@ const bcrypt = require('bcryptjs');
 
 async function createUser({nome, email, senha, telefones}) {
   try {
-    const [user] = await prisma.$transaction([
-      prisma.tb_user.create({
-        data: {
-          nome,
-          email,
-          senha: bcrypt.hashSync(senha, 10),
-          telefones: {
-            create: telefones
-          }
+    const user = await prisma.tb_user.create({
+      data: {
+        nome,
+        email,
+        senha: bcrypt.hashSync(senha, 10),
+        telefones: {
+          create: telefones
         }
-      })
-    ]);
+      }
+    })
     return user;
   } catch (error) {
     return error
@@ -44,14 +42,12 @@ async function getUserByEmail(email) {
 }
 
 async function updateUser(id, data) {
-  const user = await prisma.$transaction([
-    prisma.tb_user.update({
+  const user = await prisma.tb_user.update({
       where: {
         id
       },
-      data
-    })
-  ]);
+    data
+  })
   return user;
 }
 

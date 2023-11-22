@@ -17,21 +17,19 @@ function formatUserData(user) {
 async function createUser(req, res, next) {
   const { email, senha } = req.body;
 
-  if (!isUserDataValid(req.body)) {
-    return next({ name: 'INVALID_DATA' });
-  }
-
-  const emailAlreadyExists = await UserService.getUserByEmail(email);
-  if (emailAlreadyExists) {
-    return next({ name: 'EMAIL_ALREADY_EXISTS' });
-  }
-
-  const user = await UserService.createUser(req.body);
-  const token = await UserService.authenticateUser(email, senha);
+  if (!isUserDataValid(req.body)) return next({ name: 'INVALID_DATA' });
   
-  if (!token) {
-    return next({ name: 'INVALID_LOGIN' });
-  }
+  const emailAlreadyExists = await UserService.getUserByEmail(email);
+  
+  if (emailAlreadyExists) return next({ name: 'EMAIL_ALREADY_EXISTS' });
+  
+  const user = await UserService.createUser(req.body);
+  console.log(user);
+  if (!user) return next({ name: 'INVALID_EMAIL' });
+
+  const token = await UserService.authenticateUser(email, senha);
+  if (!token) return next({ name: 'INVALID_LOGIN' });
+
   const userFormated = formatUserData(user);
   delete userFormated.email;
   return res.status(201).json({ ...userFormated, token });

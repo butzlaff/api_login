@@ -1,9 +1,18 @@
 const bcrypt = require('bcryptjs');
 const UserModel = require('../models/index');
-const { createToken } = require('../auth/auth');
+const token = require('../auth/auth');
 
-function createUser({ nome, email, senha, telefones }) {
-  // criar validacoes
+function validateEmail(email) {
+  const regexEmail = /\S+@\S+\.\S+/;
+  return regexEmail.test(email);
+}
+
+function createUser(userData) {
+  const { nome, email, senha, telefones } = userData;
+  const validEmail = validateEmail(email);
+  if (!validEmail) {
+    return null;
+  }
   return UserModel.createUser({ nome, email, senha, telefones });
 }
 
@@ -29,7 +38,7 @@ async function authenticateUser(email, senha) {
     return null;
   }
   const user = await UserModel.updateUser(userExists.id, { ultimoLogin: new Date() });
-  return createToken(...user);
+  return token.createToken({ id: user.id, email: user.email });
 }
 
 module.exports = {

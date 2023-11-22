@@ -1,30 +1,97 @@
 const bcrypt = require('bcryptjs');
-const UserModel = require('../../src/models/index');
 const prisma = require('../../src/lib/prisma.js');
-const user = require('../mocks/user');
-const returnUser = require('../mocks/returnUser.js');
+const { user, userDatabaseCreation } = require('../mocks/user');
+const UserModel = require('../../src/models/index');
 
-describe('createUser', () => {
-  it('should create a user with valid input', async () => {
-    prisma.tb_user.create = jest.fn().mockResolvedValueOnce(returnUser);
+describe('Test UserModel', () => {
+  describe('Test the createUser fuction', () => {
+    it('should create a user with valid input data', async () => {
+      // Arrange
+      prisma.tb_user.create = jest.fn().mockResolvedValueOnce({ id: 1, ...userDatabaseCreation  })
 
-    await UserModel.createUser({ ...user });
+      // Act
+      const userCreated = await UserModel.createUser(user);
 
-    expect(returnUser).toBeDefined();
-    expect(returnUser.nome).toEqual('John Doe');
-    expect(returnUser.email).toEqual('john.doe@example.com');
-    expect(returnUser.telefones.length).toBe(1);
-    expect(returnUser.telefones[0].numero).toEqual(987654321);
-    expect(returnUser.telefones[0].ddd).toEqual(11);
+      // Assert
+      expect(userCreated).toBeDefined();
+      expect(userCreated.nome).toBe(userDatabaseCreation.nome);
+      expect(userCreated.email).toBe(userDatabaseCreation.email);
+      expect(userCreated).toMatchObject(userDatabaseCreation);
+    });
+
+    it('should return an error in case of failure', async () => {
+      // Mock a failure in the create method
+      prisma.tb_user.create = jest.fn().mockRejectedValue(new Error('Failed to create user'));
+
+      // Act
+      const error = await UserModel.createUser(user);
+
+      // Assert
+      expect(error).toBeInstanceOf(Error);
+      expect(error.message).toBe('Failed to create user');
+    });
+
+    it('shoudl hashes the password using bcrypt', async () => {
+      // Arrange
+      const input = {
+        nome: 'John Doe',
+        email: 'john.doe@example.com',
+        senha: '1234567',
+        telefones: [{ number: '123456789' }]
+      };
+
+      // Mock the bcrypt.hashSync method
+      bcrypt.hashSync = jest.fn();
+
+      // Act
+      UserModel.createUser(user);
+
+      // Assert
+      expect(bcrypt.hashSync).toHaveBeenCalledWith(input.senha, 10);
+    });
+  });
+  describe('Test getByUserId function', () => {
+    it('should return the user with id in database', async () => {
+      prisma.tb_user.findUnique = jest.fn().mockResolvedValueOnce({ id: 1, ...userDatabaseCreation });
+
+      const userFound = await UserModel.getByUserId(1);
+
+      expect(userFound).not.toBeNull();
+      expect(userFound).toMatchObject({ id: 1, ...userDatabaseCreation });
+    })
+    it('should return an error in case of failure', async () => {
+      // Mock a failure in the create method
+      prisma.tb_user.findUnique = jest.fn().mockRejectedValue(new Error('Failed to find user'));
+
+      // Act
+      const error = await UserModel.getByUserId(999);
+
+      // Assert
+      expect(error).toBeInstanceOf(Error);
+      expect(error.message).toBe('Failed to find user');
+    });
+  })
+
+  describe('Test getUserByEmail function', () => {
+    it('should return the user with email in database', async () => {
+      prisma.tb_user.findUnique = jest.fn().mockResolvedValueOnce({ id: 1, ...userDatabaseCreation });
+
+      const userFound = await UserModel.getUserByEmail('john.doe@example.com');
+
+      expect(userFound).not.toBeNull();
+      expect(userFound).toMatchObject({ id: 1, ...userDatabaseCreation });
+    });
   });
 
-  it('should return an error if user creation fails', async () => {
-    // Mocking the error response
-    const error = new Error('Failed to create user');
-    prisma.tb_user.create = jest.fn().mockRejectedValueOnce(error);
+  describe('Test updateUser function', () => {
+    it('should return the user with id in database', async () => {
+      prisma.tb_user.update = jest.fn().mockResolvedValueOnce({ id: 1, ...userDatabaseCreation });
 
-    const result = await UserModel.createUser({ ...user });
+      const userFound = await UserModel.updateUser({id: 1, ultimoLogin: '2023-11-21T22:14:43.652Z'});
 
-    expect(result).toBe(error);
-  });
+      expect(userFound).not.toBeNull();
+
+      expect(userFound).toMatchObject({ id: 1, ...userDatabaseCreation, ultimoLogin: '2023-11-21T22:14:43.652Z' });
+    })  
+  })
 });

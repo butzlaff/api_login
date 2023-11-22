@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coverage generated="1700676363646" clover="3.2.0">
+  <project timestamp="1700676363646" name="All files">
+    <metrics statements="5" coveredstatements="5" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0" elements="5" coveredelements="5" complexity="0" loc="5" ncloc="5" packages="1" files="2" classes="2"/>
+    <file name="returnUser.js" path="/home/emilio/desafio-tecnico-2/__tests__/mocks/returnUser.js">
+      <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      <line num="1" count="1" type="stmt"/>
+      <line num="8" count="1" type="stmt"/>
+    </file>
+    <file name="user.js" path="/home/emilio/desafio-tecnico-2/__tests__/mocks/user.js">
+      <metrics statements="3" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      <line num="1" count="1" type="stmt"/>
+      <line num="8" count="1" type="stmt"/>
+      <line num="18" count="1" type="stmt"/>
+    </file>
+  </project>
+</coverage>
