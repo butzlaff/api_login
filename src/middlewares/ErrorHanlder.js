@@ -15,9 +15,9 @@ const mapErrorHandler = (error) => {
 
 const ErrorHandler = (err, _req, res, _next) => {
     const errReturn = mapErrorHandler(err);
-    res.status(errReturn.status).json({
-        mensagem: errReturn.message,
-    });
+    res.status(errReturn.status).json(`
+        mensagem ${errReturn.message}
+    `);
 };
 
 module.exports = { ErrorHandler };
