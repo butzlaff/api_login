@@ -23,10 +23,11 @@ app.use(accessControl);
 
 app.use('/users', usersRouter);
 
-app.get('/', (_req, res) => res.status(200).json({ message: 'OK' }));
-
 app.use(ErrorHandler);
 
-app.use('/*', (_req, res) => res.status(404).json('mensagem: Rota não encontrada'));
+// Rota para verificação se a API está online.
+app.get('/', (_req, res) => res.status(200).json({ message: 'OK' }));
+
+app.use('/*', (_req, res) => res.status(404).json('mensagem \'Rota não encontrada\''));
 
 module.exports = app;
