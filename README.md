@@ -107,7 +107,7 @@ Fazer login:
 
 >POST
 ```sh
-http://localhost:3001/users/register
+http://localhost:3001/users/login
 ```
 Formato do body para login:
 ```
