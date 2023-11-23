@@ -135,5 +135,3 @@ http://localhost:3001/users/:id
 ```
 > Onde ID é o id cadastrado no banco de dados.
 
-
-
