@@ -21,6 +21,41 @@ npm install
 
 Depois de instalado, as dependências, agora podemos executar nosso código!
 
+> Nota: Você precisá instalar o banco de dados, existe um docker compose caso queira usar o Mysql, caso não tenha familiaridade com o Docker, poderá ler sua documentação no site: 
+
+>><a href="https://docs.docker.com">Documentação Docker</a>
+
+Ou copiando o link abaixo:
+
+```sh
+https://docs.docker.com
+```
+Caso já tenha instalado em sua máquina poderá inciar pelo comando:
+```sh
+docker compose up 
+```
+Outra coisa necessária é configurar o prisma, caso queira usar o Mysql, ou outro Banco de dados:
+
+Para usar o Mysql, basta inserir o seguinte valor nas variáveis de ambiente, ou no arquivo ".env" do projeto:
+```sh 
+DATABASE_URL="mysql://user:password@host:PORT/database"
+```
+
+Caso queira usar o banco configurado no projeto basta rodar o comando:
+
+```sh
+npx prisma migrate dev
+```
+
+Se precisar resetar o banco de dados:
+
+```sh
+npx prisma migrate reset
+```
+
+Para mais configurações consultar a documentação do prisma:
+
+<a href="https://prisma.io">Documentação Prisma</a>
 
 > Este código excutará o programa!
 ```sh
