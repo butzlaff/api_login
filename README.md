@@ -112,7 +112,7 @@ http://localhost:3001/users/login
 Formato do body para login:
 ```
 {
-  "nome": "string",
+  "senha": "string",
   "email": "string com email válido",
 }
 ```
