@@ -1,4 +1,8 @@
 const { UserService } = require('../services/index');
+const EmailExistsOrInvalidLogin = require('../utils/EmailAlreadyOrInvalidLogin');
+const InvalidData = require('../utils/InvalidData');
+const InvalidEmail = require('../utils/InvalidEmail');
+const NotFound = require('../utils/NotFound');
 
 function isUserDataValid({ nome, email, senha, telefones }) {
   return !(!nome || !email || !senha || !telefones);
@@ -14,51 +18,51 @@ function formatUserData(user) {
   };
 }
 
-async function createUser(req, res, next) {
+async function createUser(req, res) {
   const { email, senha } = req.body;
 
-  if (!isUserDataValid(req.body)) return next({ name: 'INVALID_DATA' });
+  if (!isUserDataValid(req.body)) throw new InvalidData('Dados inválidos');
   
   const emailAlreadyExists = await UserService.getUserByEmail(email);
   
-  if (emailAlreadyExists) return next({ name: 'EMAIL_ALREADY_EXISTS' });
+  if (emailAlreadyExists) throw new EmailExistsOrInvalidLogin('E-mail já existente');
   
   const user = await UserService.createUser(req.body);
   
-  if (!user) return next({ name: 'INVALID_EMAIL' });
+  if (!user) throw new InvalidEmail('Email inválido');
   
   const token = await UserService.authenticateUser(email, senha);
-  if (!token) return next({ name: 'INVALID_LOGIN' });
+  if (!token) throw new EmailExistsOrInvalidLogin('Usuário e/ou senha inválidos');
 
   const userFormated = formatUserData(user);
   delete userFormated.email;
   return res.status(201).json({ ...userFormated, token });
 }
 
-async function login(req, res, next) {
+async function login(req, res) {
   const { email, senha } = req.body;
 
   if (!email || !senha) {
-    next({ name: 'INVALID_DATA' });
+    throw new InvalidData('Dados inválidos');
   }
   const user = await UserService.getUserByEmail(email);
   const token = await UserService.authenticateUser(email, senha);
   if (!token) {
-    next({ name: 'INVALID_LOGIN' });
+    throw new EmailExistsOrInvalidLogin('Usuário e/ou senha inválidos');
   }
   const userFormated = formatUserData(user);
   delete userFormated.email;
   return res.status(200).json({ ...userFormated, token });
 }
 
-async function findUserById(req, res, next) {
+async function findUserById(req, res) {
   const { id } = req.params;
   const user = await UserService.getByUserId(Number(id));
   if (user) {
     const userFormated = formatUserData(user);
     return res.status(200).json({ ...userFormated, email: user.email });
   }
-  return next({ name: 'USER_NOT_FOUND' });
+  throw new NotFound('Usuário e/ou senha inválidos');
 }
 
 module.exports = {
