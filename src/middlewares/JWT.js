@@ -1,5 +1,6 @@
 const { getPayload } = require('../auth/auth');
 const UserService = require('../models/index');
+const EmailExistsOrInvalidLogin = require('../utils/EmailAlreadyOrInvalidLogin');
 
 function extractToken(bearerToken) {
   const token = bearerToken.split(' ')[0];
@@ -18,14 +19,14 @@ async function validateJwt(req, res, next) {
     const user = await UserService.getByUserId(id);
 
     if (!user || user.email !== email) {
-      return res.status(401).json({ messagem: '{ "mensagem": "Não autorizado" } ' });
+      throw new EmailExistsOrInvalidLogin('Não autorizado');
     }
 
     req.user = user;
 
     next();
   } catch (error) {
-    return res.status(401).json({ mensagem: 'Sessão inválida' });
+    throw new EmailExistsOrInvalidLogin('Sessão inválida');
   }
 }
 

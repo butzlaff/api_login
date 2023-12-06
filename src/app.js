@@ -1,3 +1,4 @@
+require('express-async-errors');
 const cors = require('cors');
 const express = require('express');
 const { usersRouter } = require('./routes');
